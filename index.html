@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="Simulador educativo de atenuación pasiva de señales móviles"
+    >
+
+    <title>Simulador de Atenuación Pasiva</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="encabezado">
+        <div class="encabezado-contenido">
+            <p class="etiqueta">Proyecto de telecomunicaciones</p>
+
+            <h1>Simulador de Atenuación Pasiva de Señales</h1>
+
+            
+        </div>
+    </header>
+
+    <main class="contenedor">
+
+        <!-- Aviso de seguridad -->
+        <section class="aviso-seguridad">
+            <h2>Uso académico y control pasivo</h2>
+
+            <p>
+                Este simulador únicamente realiza cálculos matemáticos.
+                No transmite radiofrecuencia, no genera interferencia y
+                no controla inhibidores activos de señal.
+            </p>
+        </section>
+
+        <!-- Controles del simulador -->
+        <section class="seccion">
+            <div class="titulo-seccion">
+                <span>01</span>
+
+                <div>
+                    <h2>Variables de la simulación</h2>
+
+                    <p>
+                        Selecciona las condiciones que deseas evaluar.
+                    </p>
+                </div>
+            </div>
+
+            <div class="panel-controles">
+
+                <!-- Tecnología y frecuencia -->
+                <div class="grupo-control">
+                    <label for="frecuencia">
+                        Tecnología y frecuencia
+                    </label>
+
+                    <select id="frecuencia">
+                        <option value="850">2G — 850 MHz</option>
+                        <option value="1900" selected>3G — 1900 MHz</option>
+                        <option value="2100">4G — 2100 MHz</option>
+                        <option value="3500">5G Sub-6 — 3.5 GHz</option>
+                        <option value="28000">5G mmWave — 28 GHz</option>
+                    </select>
+                </div>
+
+                <!-- Distancia -->
+                <div class="grupo-control">
+                    <div class="control-encabezado">
+                        <label for="distancia">Distancia del trayecto</label>
+
+                        <output id="valor-distancia">10 m</output>
+                    </div>
+
+                    <input
+                        type="range"
+                        id="distancia"
+                        min="1"
+                        max="200"
+                        value="10"
+                        step="1"
+                    >
+                </div>
+
+                <!-- Potencia transmitida -->
+                <div class="grupo-control">
+                    <div class="control-encabezado">
+                        <label for="potencia">
+                            Potencia transmitida
+                        </label>
+
+                        <output id="valor-potencia">30 dBm</output>
+                    </div>
+
+                    <input
+                        type="range"
+                        id="potencia"
+                        min="-10"
+                        max="60"
+                        value="30"
+                        step="1"
+                    >
+                </div>
+
+                <!-- Material -->
+                <div class="grupo-control">
+                    <label for="material">Material del muro</label>
+
+                    <select id="material">
+                        <option value="ladrillo">Ladrillo</option>
+                        <option value="concreto" selected>
+                            Concreto reforzado
+                        </option>
+                        <option value="malla">
+                            Malla de acero / Jaula de Faraday
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Grosor -->
+                <div class="grupo-control">
+                    <div class="control-encabezado">
+                        <label for="grosor">Grosor del muro</label>
+
+                        <output id="valor-grosor">0.30 m</output>
+                    </div>
+
+                    <input
+                        type="range"
+                        id="grosor"
+                        min="0.05"
+                        max="1.50"
+                        value="0.30"
+                        step="0.05"
+                    >
+                </div>
+
+                <!-- Cantidad de muros -->
+                <div class="grupo-control">
+                    <div class="control-encabezado">
+                        <label for="muros">Cantidad de muros</label>
+
+                        <output id="valor-muros">1 muro</output>
+                    </div>
+
+                    <input
+                        type="range"
+                        id="muros"
+                        min="1"
+                        max="5"
+                        value="1"
+                        step="1"
+                    >
+                </div>
+
+                <!-- Umbral -->
+                <div class="grupo-control">
+                    <div class="control-encabezado">
+                        <label for="umbral">
+                            Umbral de comunicación
+                        </label>
+
+                        <output id="valor-umbral">−95 dBm</output>
+                    </div>
+
+                    <input
+                        type="range"
+                        id="umbral"
+                        min="-120"
+                        max="-70"
+                        value="-95"
+                        step="1"
+                    >
+                </div>
+
+                <button id="btn-calcular" type="button">
+                    Calcular atenuación
+                </button>
+            </div>
+        </section>
+
+        <!-- Plano 2D -->
+        <section class="seccion">
+            <div class="titulo-seccion">
+                <span>02</span>
+
+                <div>
+                    <h2>Representación del trayecto</h2>
+
+                    <p>
+                        Plano conceptual de la fuente, los muros y el receptor.
+                    </p>
+                </div>
+            </div>
+
+            <div class="plano-contenedor">
+                <canvas
+                    id="plano"
+                    width="1000"
+                    height="420"
+                    aria-label="Representación conceptual del trayecto de la señal"
+                >
+                    Tu navegador no admite el elemento canvas.
+                </canvas>
+
+                <div class="leyenda">
+                    <div>
+                        <span class="leyenda-color fuente"></span>
+                        Fuente de señal
+                    </div>
+
+                    <div>
+                        <span class="leyenda-color muro"></span>
+                        Muro
+                    </div>
+
+                    <div>
+                        <span class="leyenda-color receptor"></span>
+                        Receptor
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resultados -->
+        <section class="seccion">
+            <div class="titulo-seccion">
+                <span>03</span>
+
+                <div>
+                    <h2>Resultados del balance de potencia</h2>
+
+                    <p>
+                        Los valores se actualizarán según las variables seleccionadas.
+                    </p>
+                </div>
+            </div>
+
+            <div class="resultados-grid">
+
+                <article class="tarjeta-resultado">
+                    <h3>Longitud de onda</h3>
+                    <strong id="resultado-longitud">0.158 m</strong>
+                    <p>Relación entre la velocidad de la luz y la frecuencia.</p>
+                </article>
+
+                <article class="tarjeta-resultado">
+                    <h3>Pérdida FSPL</h3>
+                    <strong id="resultado-fspl">58.02 dB</strong>
+                    <p>Pérdida estimada por frecuencia y distancia.</p>
+                </article>
+
+                <article class="tarjeta-resultado">
+                    <h3>Pérdida por muros</h3>
+                    <strong id="resultado-material">0.00 dB</strong>
+                    <p>Atenuación adicional estimada por los obstáculos.</p>
+                </article>
+
+                <article class="tarjeta-resultado principal">
+                    <h3>Potencia recibida</h3>
+                    <strong id="resultado-potencia">0.00 dBm</strong>
+                    <p id="resultado-estado">
+                        Esperando cálculo.
+                    </p>
+                </article>
+            </div>
+
+            <!-- Desglose -->
+            <div class="desglose">
+                <h3>Desglose del cálculo</h3>
+
+                <div class="tabla-contenedor">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Símbolo</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>Potencia transmitida</td>
+                                <td>Pt</td>
+                                <td id="detalle-potencia">30 dBm</td>
+                            </tr>
+
+                            <tr>
+                                <td>Pérdida en espacio libre</td>
+                                <td>FSPL</td>
+                                <td id="detalle-fspl">58.02 dB</td>
+                            </tr>
+
+                            <tr>
+                                <td>Pérdida por materiales</td>
+                                <td>ΣL</td>
+                                <td id="detalle-material">0.00 dB</td>
+                            </tr>
+
+                            <tr class="fila-total">
+                                <td>Potencia recibida</td>
+                                <td>Pr</td>
+                                <td id="detalle-recibida">0.00 dBm</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Barra del umbral -->
+            <div class="comparacion-umbral">
+                <h3>Comparación con el umbral</h3>
+
+                <div class="barra-senal">
+                    <div id="nivel-senal" class="nivel-senal"></div>
+
+                    <div id="marca-umbral" class="marca-umbral">
+                        <span>Umbral: −95 dBm</span>
+                    </div>
+                </div>
+
+                <p id="mensaje-umbral">
+                    Presiona “Calcular atenuación” para obtener el resultado.
+                </p>
+            </div>
+        </section>
+
+        <!-- Comparación técnica -->
+        <section class="seccion">
+            <div class="titulo-seccion">
+                <span>04</span>
+
+                <div>
+                    <h2>Comparación entre 1900 MHz y 3.5 GHz</h2>
+
+                    <p>
+                        Se aplicarán las mismas condiciones para ambas frecuencias.
+                    </p>
+                </div>
+            </div>
+
+            <div class="tabla-contenedor">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Indicador</th>
+                            <th>1900 MHz</th>
+                            <th>3.5 GHz</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Longitud de onda</td>
+                            <td id="comparacion-longitud-1900">0.158 m</td>
+                            <td id="comparacion-longitud-3500">0.086 m</td>
+                        </tr>
+
+                        <tr>
+                            <td>FSPL</td>
+                            <td id="comparacion-fspl-1900">0.00 dB</td>
+                            <td id="comparacion-fspl-3500">0.00 dB</td>
+                        </tr>
+
+                        <tr>
+                            <td>Pérdida por material</td>
+                            <td id="comparacion-material-1900">0.00 dB</td>
+                            <td id="comparacion-material-3500">0.00 dB</td>
+                        </tr>
+
+                        <tr class="fila-total">
+                            <td>Potencia recibida</td>
+                            <td id="comparacion-potencia-1900">0.00 dBm</td>
+                            <td id="comparacion-potencia-3500">0.00 dBm</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p id="conclusion-comparacion" class="conclusion-comparacion">
+                La comparación aparecerá después de realizar el cálculo.
+            </p>
+        </section>
+
+        <!-- Fórmulas -->
+        <section class="seccion formulas">
+            <div class="titulo-seccion">
+                <span>05</span>
+
+                <div>
+                    <h2>Fórmulas implementadas</h2>
+
+                    <p>
+                        Base matemática utilizada por el simulador.
+                    </p>
+                </div>
+            </div>
+
+            <div class="formula-grid">
+                <article>
+                    <h3>Longitud de onda</h3>
+                    <p class="formula">λ = c / f</p>
+                </article>
+
+                <article>
+                    <h3>Pérdida en espacio libre</h3>
+                    <p class="formula">
+                        FSPL = 32.44 + 20 log₁₀(d) + 20 log₁₀(f)
+                    </p>
+                </article>
+
+                <article>
+                    <h3>Balance de potencia</h3>
+                    <p class="formula">
+                        Pr = Pt − FSPL − ΣL
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Limitaciones -->
+        <section class="limitaciones">
+            <h2>Limitaciones del modelo</h2>
+
+            <p>
+                Los coeficientes de los materiales son valores educativos de
+                referencia. La atenuación real puede cambiar por la composición,
+                humedad, densidad, continuidad del blindaje, aberturas y condiciones
+                del entorno. Una implementación física requiere mediciones
+                profesionales y autorización institucional.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>
+            Proyecto Inicial —
+            Morgeany Nicolle Garcia Lopez 
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
